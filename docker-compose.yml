@@ -1,0 +1,21 @@
+version: '2.1'
+services:
+  db:
+    restart: always
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - ~/.docker-volumes/invoiceplane/mysql/data:/var/lib/mysql
+  web:
+    build: .
+    tty: true
+    stdin_open: true
+    volumes:
+      - "${VOLUME:-.:/invoiceplane}"
+    ports:
+      - "5001:80"
+    depends_on:
+      - db
+    env_file:
+      - .env-docker
